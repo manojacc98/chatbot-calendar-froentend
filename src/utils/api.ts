@@ -1,8 +1,8 @@
-import axios from 'axios'; 
+import axios from 'axios';
 
-export const API_BASE = "http://localhost:8000/api";
+export const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000/api";
 
-
-
-
-axios.get(`${API_BASE}/api/auth-url/`);
+// You can export a test function if needed
+export const testConnection = async () => {
+  return axios.get(`${API_BASE}/test-ping/`);
+};
