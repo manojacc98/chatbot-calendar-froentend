@@ -1,0 +1,24 @@
+'use client';
+
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import axios from "axios";
+
+export default function OAuthCallback() {
+  const router = useRouter();
+  const params = useSearchParams();
+  const code = params.get("code");
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      if (code) {
+        await axios.get(`http://localhost:8000/api/oauth2callback/?code=${code}`);
+        localStorage.setItem("auth", "true");
+        router.push("/");
+      }
+    };
+    fetchToken();
+  }, [code, router]);
+
+  return <p>Authenticating with Google...</p>;
+}

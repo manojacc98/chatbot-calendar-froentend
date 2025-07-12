@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🗓️ Chatbot Calendar Frontend
 
-## Getting Started
+This is the frontend for the **Calendar Assistant Chatbot**, built with **Next.js** and **Tailwind CSS**. It allows users to authenticate via Gmail, create calendar events, view upcoming events, and interact with a chatbot interface that can read and write to a connected calendar application.
 
-First, run the development server:
+---
 
-```bash
+## 🚀 Features
+
+-  Google OAuth2 login integration
+-  Create and save new events to your calendar
+-  Display a list of upcoming events
+-  Chatbot assistant interface (NLP-driven)
+-  Responsive and modern UI built with Tailwind CSS
+-  API integration with Django backend for calendar operations
+
+---
+
+## 📁 Project Structure
+
+calendar-frontend
+│
+├── src/
+│ ├── app/
+│ │ └── page.tsx # Main UI with login, event creation, and chatbot
+│ ├── components/
+│ │ └── ChatbotBox.tsx # Chatbot UI component
+│ ├── utils/
+│ │ └── api.ts # API base URL config
+│
+├── public/
+├── .env.local # (Optional) API environment configuration
+├── tailwind.config.js
+├── next.config.js
+├── package.json
+└── README.md
+
+
+---
+
+## ⚙️ Getting Started
+
+### 1. Clone the repository
+
+
+git clone https://github.com/your-username/chatbot-calendar-froentend.git
+cd chatbot-calendar-froentend
+
+Install dependencies
+npm install
+
+ Set environment variables
+
+Create a .env.local file and define your backend URL:
+
+NEXT_PUBLIC_API_BASE=http://localhost:8000/api
+
+    Update the API base URL if your backend is deployed.
+
+ Run the development server
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit http://localhost:3000 in your browser.
+ Build for production
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+npm run build
+npm start
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+🔗 Backend Repository
 
-To learn more about Next.js, take a look at the following resources:
+Make sure to also run the Django Backend that supports this frontend.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ Author
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Made with by Manoj R

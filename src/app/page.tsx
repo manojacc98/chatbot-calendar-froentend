@@ -1,103 +1,151 @@
-import Image from "next/image";
+'use client'
+export const dynamic = "force-dynamic"
 
-export default function Home() {
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import ChatbotBox from '@/components/ChatbotBox'
+import { API_BASE } from '@/utils/api'
+
+export default function HomePage() {
+  const [title, setTitle] = useState('')
+  const [datetime, setDatetime] = useState('')
+  const [events, setEvents] = useState<any[]>([])
+
+  const fetchEvents = async () => {
+    try {
+      if (typeof window === 'undefined') return // ✅ Ensure client-only
+
+      const email = new URLSearchParams(window.location.search).get('email')
+      if (!email) return
+
+      const res = await axios.get(`${API_BASE}/events/?email=${email}`)
+      const items = res.data.items || []
+      const formatted = items.map((item: any) => ({
+        title: item.summary || '(No Title)',
+        time: new Date(item.start.dateTime).toLocaleString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+        }),
+      }))
+      setEvents(formatted)
+    } catch (err) {
+      console.error('Failed to fetch events:', err)
+    }
+  }
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return // ✅ Prevent SSR execution
+
+    fetchEvents()
+    const interval = setInterval(fetchEvents, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const createEvent = async () => {
+    try {
+      const email = new URLSearchParams(window.location.search).get('email')
+      if (!email) throw new Error('Email not found in URL')
+
+      const startTimeIST = new Date(
+        new Date(datetime).getTime() + 5.5 * 60 * 60 * 1000
+      ).toISOString().replace('.000Z', '+05:30')
+
+      const endTimeIST = new Date(
+        new Date(datetime).getTime() + (5.5 + 1) * 60 * 60 * 1000
+      ).toISOString().replace('.000Z', '+05:30')
+
+      await axios.post(`${API_BASE}/events/?email=${email}`, {
+        summary: title,
+        start: startTimeIST,
+        end: endTimeIST,
+        timezone: 'Asia/Kolkata',
+      })
+
+      alert(' Event created!')
+      setTitle('')
+      setDatetime('')
+      fetchEvents()
+    } catch (err: any) {
+      console.error(err)
+      alert(' Failed: ' + (err.response?.data?.error || 'Unknown error'))
+    }
+  }
+
+  const handleLogin = () => {
+    window.location.href = 'http://localhost:8000/api/google/login/'
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="min-h-screen bg-gradient-to-br from-[#3E4EFF] via-[#4B5EFF] to-[#3E4EFF] flex flex-col items-center justify-start px-4 py-10">
+      <h1 className="text-3xl font-bold text-white mb-6 text-center">
+         🗓️ Calendar Assistant
+      </h1>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <div className="text-center mb-8">
+        <button
+          onClick={handleLogin}
+          className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full shadow font-medium"
+        >
+          🔐 Login with Gmail
+        </button>
+      </div>
+
+      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+        <div className="bg-[#fdf8f2] rounded-xl shadow-md p-6 w-full space-y-6 max-w-md mx-auto">
+          <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+            📝 Create your Event
+          </h2>
+
+          <input
+            type="text"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            placeholder="Event Title"
+            className="w-full text-base text-gray-800 placeholder-gray-500 border-b border-gray-300 pb-2 focus:outline-none"
+          />
+
+          <input
+            type="datetime-local"
+            value={datetime}
+            onChange={e => setDatetime(e.target.value)}
+            className="w-full border border-gray-300 rounded px-4 py-2 text-gray-800 focus:outline-none"
+          />
+
+          <div className="text-right">
+            <button
+              onClick={createEvent}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow"
+            >
+               Save Event
+            </button>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-bold text-gray-800 mb-2 flex items-center gap-1">
+              📅 Upcoming Events
+            </h3>
+            <div className="max-h-56 overflow-y-auto pr-1">
+              <ul className="space-y-2 text-sm text-gray-700">
+                {events.map((e, i) => (
+                  <li key={i} className="border rounded p-3 bg-gray-100 shadow-sm">
+                    <strong>{e.title}</strong><br />
+                    <span className="text-gray-600 text-sm">{e.time}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+
+        <div className="md:pl-6">
+          <ChatbotBox />
+        </div>
+      </div>
+    </main>
+  )
 }
