@@ -77,7 +77,7 @@ export default function HomePage() {
   }
 
   const handleLogin = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/google/login/`
+     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/google/login/`
 
   }
 
