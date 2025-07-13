@@ -13,7 +13,7 @@ export default function HomePage() {
 
   const fetchEvents = async () => {
     try {
-      if (typeof window === 'undefined') return // ✅ Ensure client-only
+      if (typeof window === 'undefined') return 
 
       const email = new URLSearchParams(window.location.search).get('email')
       if (!email) return
@@ -39,7 +39,7 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    if (typeof window === 'undefined') return // ✅ Prevent SSR execution
+    if (typeof window === 'undefined') return 
 
     fetchEvents()
     const interval = setInterval(fetchEvents, 5000)
