@@ -71,8 +71,13 @@ export default function HomePage() {
       setDatetime('')
       fetchEvents()
     } catch (err: any) {
-      console.error(err)
-      alert(' Failed: ' + (err.response?.data?.error || 'Unknown error'))
+      console.error("❌ Full error:",err)
+      alert(' Failed: ' + (
+        err.response?.data?.error ||
+        err.response?.data?.detail ||   
+        err.message || 
+        'Unknown error'
+      ))
     }
   }
 
