@@ -69,11 +69,4 @@ Built by Manoj — open to feedback and contributions!
 
 
 
----
 
-Let me know if you'd like to add:
-- Cronofy instructions
-- Backend repo link
-- Project screenshots
-
-I can update it for you accordingly.
