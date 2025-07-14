@@ -1,76 +1,79 @@
-# 🗓️ Chatbot Calendar Frontend
+# 🗓 Calendar Assistant Chatbot
 
-This is the frontend for the **Calendar Assistant Chatbot**, built with **Next.js** and **Tailwind CSS**. It allows users to authenticate via Gmail, create calendar events, view upcoming events, and interact with a chatbot interface that can read and write to a connected calendar application.
-
----
-
-## 🚀 Features
-
--  Google OAuth2 login integration
--  Create and save new events to your calendar
--  Display a list of upcoming events
--  Chatbot assistant interface (NLP-driven)
--  Responsive and modern UI built with Tailwind CSS
--  API integration with Django backend for calendar operations
+This is a full-stack chatbot interface that allows users to **create and view calendar events** through a conversational interface, integrated with Google Calendar .
 
 ---
 
-## 📁 Project Structure
+## Tech Stack
 
-calendar-frontend
-│
-├── src/
-│ ├── app/
-│ │ └── page.tsx # Main UI with login, event creation, and chatbot
-│ ├── components/
-│ │ └── ChatbotBox.tsx # Chatbot UI component
-│ ├── utils/
-│ │ └── api.ts # API base URL config
-│
-├── public/
-├── .env.local # (Optional) API environment configuration
-├── tailwind.config.js
-├── next.config.js
-├── package.json
-└── README.md
-
+- **Frontend**: Next.js (TypeScript), Tailwind CSS
+- **Backend**: Django + REST Framework
+- **Calendar Integration**: Google Calendar (OAuth2) or Cronofy API
+- **Auth**: Google OAuth2 (with `App Not Verified` workaround)
 
 ---
 
-## ⚙️ Getting Started
+##  Features
+
+-  Google OAuth login for calendar access
+-  Event creation (title + datetime)
+-  NLP chatbot interface to create or fetch events
+-  Fixed right-side chatbot layout
+-  Professional footer with Google login instructions
+-  Fully responsive UI
+
+---
+
+##  How to Use
 
 ### 1. Clone the repository
 
 
-git clone https://github.com/your-username/chatbot-calendar-froentend.git
-cd chatbot-calendar-froentend
+git clone https://github.com/manojacc98/chatbot-calendar-frontend.git
+cd chatbot-calendar-frontend
+2. Install dependencies
 
-Install dependencies
 npm install
+3. Configure environment variables
+Create a .env.local file:
 
- Set environment variables
 
-Create a .env.local file and define your backend URL:
-
-NEXT_PUBLIC_API_BASE=http://localhost:8000/api
-
-    Update the API base URL if your backend is deployed.
-
- Run the development server
+NEXT_PUBLIC_API_BASE=http://localhost:8000/api  # Or your backend URL
+4. Run the development server
 
 npm run dev
+ Notes
+If you see a "Google App Not Verified" warning:
 
-Visit http://localhost:3000 in your browser.
- Build for production
+Click "Advanced"
 
-npm run build
-npm start
+Click "Go to [your app name] (unsafe)"
+
+This is expected for development/testing apps using Google OAuth2.
+
+ Live Demo
+ Production: https://chatbot-calendar-frontend.vercel.app
+
+ Repository Structure
+
+src/
+├── app/            # Page layout and routing
+├── components/     # UI Components (ChatbotBox, EventForm etc.)
+├── utils/          # Helper functions
+├── public/         # Static assets
 
 
-🔗 Backend Repository
+Contact
+Built by Manoj — open to feedback and contributions!
 
-Make sure to also run the Django Backend that supports this frontend.
 
- Author
 
-Made with by Manoj R
+
+---
+
+Let me know if you'd like to add:
+- Cronofy instructions
+- Backend repo link
+- Project screenshots
+
+I can update it for you accordingly.
